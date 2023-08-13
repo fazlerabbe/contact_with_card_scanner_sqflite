@@ -1,4 +1,5 @@
 import 'package:contact_with_card_scanner/model/contact_model.dart';
+import 'package:contact_with_card_scanner/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,19 @@ class _FormPageState extends State<FormPage> {
   final _mobileController = TextEditingController();
   final _webController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  @override
+  void didChangeDependencies() {
+    final contact = ModalRoute.of(context)!.settings.arguments as ContactModel;
+    _nameController.text = contact.name;
+    _designationController.text = contact.designation;
+    _companyController.text = contact.company;
+    _mobileController.text = contact.mobile;
+    _emailController.text = contact.email;
+    _addressController.text = contact.address;
+    _webController.text = contact.website;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,7 +152,8 @@ class _FormPageState extends State<FormPage> {
       print(contactModel.toString());
       Provider.of<ContactProvider>(context, listen: false)
           .insertContact(contactModel)
-          .then((value) => Navigator.pop(context));
+          .then((value) => Navigator.popUntil(
+              context, ModalRoute.withName(HomePage.routeName)));
     }
   }
 

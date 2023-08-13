@@ -37,9 +37,29 @@ class DbHelper {
 
   static Future<List<ContactModel>> getAllContacts() async {
     final db = await _open();
-
     final List<Map<String, dynamic>> mapList = await db.query(tblContact);
     return List.generate(
         mapList.length, (index) => ContactModel.fromMap(mapList[index]));
+  }
+
+  static Future<List<ContactModel>> getAllFavoriteContacts() async {
+    final db = await _open();
+    final List<Map<String, dynamic>> mapList = await db
+        .query(tblContact, where: '$tblContactColFavorite = ?', whereArgs: [1]);
+    return List.generate(
+        mapList.length, (index) => ContactModel.fromMap(mapList[index]));
+  }
+
+  static Future<ContactModel> getContactById(int id) async {
+    final db = await _open();
+    final List<Map<String, dynamic>> mapList = await db
+        .query(tblContact, where: '$tblContactColId = ?', whereArgs: [id]);
+    return ContactModel.fromMap(mapList.first);
+  }
+
+  static Future<int> delete(int id) async {
+    final db = await _open();
+    return db
+        .delete(tblContact, where: '$tblContactColId = ?', whereArgs: [id]);
   }
 }
