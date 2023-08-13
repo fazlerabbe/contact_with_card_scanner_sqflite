@@ -1,7 +1,10 @@
-import 'package:contact_with_card_scanner/db/dbhelper.dart';
-import 'package:contact_with_card_scanner/model/contact_model.dart';
+import 'package:contact_with_card_scanner/page/contact_details_page.dart';
 import 'package:contact_with_card_scanner/page/contact_form_page.dart';
+import 'package:contact_with_card_scanner/provider/contact_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../model/contact_model.dart';
 
 class HomePage extends StatelessWidget {
   static const String routeName = '/';
@@ -9,25 +12,36 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ContactModel> contactLiat = [];
-    DbHelper.getAllContacts().then((value) {
-      contactLiat = value;
-      print(contactLiat.length);
-    });
+    final contactProvider =
+        Provider.of<ContactProvider>(context, listen: false);
+    contactProvider.getAllContacts();
     return Scaffold(
-      appBar: AppBar(title: Text("contact List")),
-      body: ListView.builder(
-        itemCount: contactLiat.length,
-        itemBuilder: (context, index) {
-          final contact = contactLiat[index];
-          return ListTile(
-            title: Text(contact.name),
-            trailing: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                    contact.favorite ? Icons.favorite : Icons.favorite_border)),
-          );
-        },
+      appBar: AppBar(
+          title: Text("contact List${contactProvider.contactList.length}")),
+      body: Consumer<ContactProvider>(
+        builder: (context, provider, child) => ListView.builder(
+          itemCount: provider.contactList.length,
+          itemBuilder: (context, index) {
+            final contact = provider.contactList[index];
+            return ListTile(
+              onTap: () => Navigator.pushNamed(
+                context,
+                ContactDetails.routeName,
+                arguments: contact,
+              ),
+              title: Text(contact.name),
+              trailing: IconButton(
+                  onPressed: () {
+                    final value = contact.favorite ? 0 : 1;
+                    provider.updateContact(
+                        contact.id, tblContactColFavorite, value);
+                  },
+                  icon: Icon(contact.favorite
+                      ? Icons.favorite
+                      : Icons.favorite_border)),
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

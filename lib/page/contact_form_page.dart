@@ -1,7 +1,9 @@
 import 'package:contact_with_card_scanner/model/contact_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../db/dbhelper.dart';
+import '../provider/contact_provider.dart';
 
 class FormPage extends StatefulWidget {
   static const String routeName = '/form_Page';
@@ -134,9 +136,9 @@ class _FormPageState extends State<FormPage> {
         address: _addressController.text,
       );
       print(contactModel.toString());
-      DbHelper.insertContact(contactModel).catchError((error) {
-        print(error.toString());
-      }).then((value) => Navigator.pop(context));
+      Provider.of<ContactProvider>(context, listen: false)
+          .insertContact(contactModel)
+          .then((value) => Navigator.pop(context));
     }
   }
 

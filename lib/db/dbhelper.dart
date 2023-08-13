@@ -29,11 +29,11 @@ class DbHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  // static Future<int> updateContact(int id, Map<String, dynamic> map) async {
-  //   final db = await _open();
-  //   return db.update(tblContact, map,
-  //       where: '$tblContactColId = ?', whereArgs: [id]);
-  // }
+  static Future<int> updateContact(int id, Map<String, dynamic> map) async {
+    final db = await _open();
+    return db.update(tblContact, map,
+        where: '$tblContactColId = ?', whereArgs: [id]);
+  }
 
   static Future<List<ContactModel>> getAllContacts() async {
     final db = await _open();
