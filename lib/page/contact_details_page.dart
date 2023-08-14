@@ -43,12 +43,19 @@ class _ContactDetailsState extends State<ContactDetails> {
             final contact = snapshot.data!;
             return ListView(
               children: [
-                Image.asset(
-                  'images/placeholder.png',
-                  width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.cover,
-                ),
+                contact.image.isEmpty
+                    ? Image.asset(
+                        'images/placeholder.png',
+                        width: double.infinity,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.file(
+                        File(contact.image),
+                        width: double.infinity,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ),
                 ListTile(
                   leading: IconButton(
                     onPressed: () {

@@ -10,6 +10,7 @@ const String tblContactColCompany = 'company';
 const String tblContactColAddress = 'address';
 const String tblContactColWeb = 'website';
 const String tblContactColFavorite = 'favorite';
+const String tblContactColImage = 'image';
 
 class ContactModel {
   int id;
@@ -20,6 +21,7 @@ class ContactModel {
   String company;
   String address;
   String website;
+  String image;
   bool favorite;
 
   ContactModel(
@@ -31,6 +33,7 @@ class ContactModel {
       this.company = '',
       this.address = '',
       this.website = '',
+      this.image = '',
       this.favorite = false});
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{
@@ -41,6 +44,7 @@ class ContactModel {
       tblContactColCompany: company,
       tblContactColAddress: address,
       tblContactColWeb: website,
+      tblContactColImage: image,
       tblContactColFavorite: favorite ? 1 : 0,
     };
     if (id != 0) {
@@ -58,6 +62,7 @@ class ContactModel {
         company: map[tblContactColCompany],
         address: map[tblContactColAddress],
         website: map[tblContactColWeb],
+        image: map[tblContactColImage] ?? '',
         favorite: map[tblContactColFavorite] == 1 ? true : false,
       );
 

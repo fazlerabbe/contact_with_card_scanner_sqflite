@@ -13,14 +13,25 @@ class DbHelper {
   $tblContactColCompany text, 
   $tblContactColAddress text,  
   $tblContactColWeb text, 
+  $tblContactColImage text,
   $tblContactColFavorite integer)''';
 
   static Future<Database> _open() async {
     final rootPath = await getDatabasesPath();
     final dbPath = p.join(rootPath, 'contact.db');
-    return openDatabase(dbPath, version: 1, onCreate: (db, version) {
-      db.execute(_createTableContact);
-    });
+    return openDatabase(
+      dbPath,
+      version: 2,
+      onCreate: (db, version) {
+        db.execute(_createTableContact);
+      },
+      onUpgrade: (db, oldVersion, newVersion) {
+        if (newVersion == 2) {
+          db.execute(
+              'alter table $tblContact add column $tblContactColImage text');
+        }
+      },
+    );
   }
 
   static Future<int> insertContact(ContactModel contactModel) async {
